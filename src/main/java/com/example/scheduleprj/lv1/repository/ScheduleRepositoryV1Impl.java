@@ -3,12 +3,16 @@ package com.example.scheduleprj.lv1.repository;
 import com.example.scheduleprj.lv1.dto.ScheduleResponseDto;
 import com.example.scheduleprj.lv1.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -40,7 +44,26 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 key.longValue(),
                 schedule.getTitle(),
                 schedule.getWriter(),
-                schedule.getCreatedAt(),
                 schedule.getModifiedAt());
+    }
+
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+        return jdbcTemplate.query("select * from schedulev1 order by modifiedAt desc", scheduleMapper());
+    }
+
+    private RowMapper<ScheduleResponseDto> scheduleMapper() {
+        return new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("writer"),
+                        rs.getTimestamp("modifiedAt").toLocalDateTime()
+
+                );
+            }
+        };
     }
 }
