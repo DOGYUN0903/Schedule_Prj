@@ -6,3 +6,9 @@
 
 👉 [🔗 API 문서 바로가기](https://documenter.getpostman.com/view/34889512/2sB2jAaSsc)
 
+<hr>
+
+📘 ER 다이어그램(ERD)
+
+![Schedule.png](..%2F..%2F..%2FDownloads%2FSchedule.png)
+
