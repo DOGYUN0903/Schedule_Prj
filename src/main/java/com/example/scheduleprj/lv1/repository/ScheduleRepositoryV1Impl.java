@@ -51,8 +51,16 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select * from schedulev1 order by modifiedAt desc", scheduleMapper());
+    public List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt) {
+        if (writer != null && modifiedAt == null) {
+            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer);
+        } else if (writer == null && modifiedAt != null) {
+            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), modifiedAt);
+        } else if (writer != null && modifiedAt != null) {
+            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? AND DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer, modifiedAt);
+        } else {
+            return jdbcTemplate.query("SELECT * FROM scheduleV1 ORDER BY modifiedAt DESC", scheduleMapper());
+        }
     }
 
     @Override
@@ -62,6 +70,12 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         return result.stream()
                 .findAny()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+    }
+
+    @Override
+    public ScheduleResponseDto updateSchedule(Schedule schedule) {
+        return null;
+//        return new ScheduleResponseDto(jdbcTemplate.update(""));
     }
 
     private RowMapper<ScheduleResponseDto> scheduleMapper() {

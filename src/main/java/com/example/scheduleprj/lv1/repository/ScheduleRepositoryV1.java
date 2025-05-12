@@ -9,7 +9,9 @@ import java.util.Optional;
 public interface ScheduleRepositoryV1 {
     ScheduleResponseDto saveSchedule(Schedule schedule);
 
-    List<ScheduleResponseDto> findAllSchedules();
+    List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt);
 
     Schedule findScheduleByIdOrElseThrow(Long id);
+
+    ScheduleResponseDto updateSchedule(Schedule schedule);
 }
