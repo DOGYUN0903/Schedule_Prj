@@ -10,5 +10,4 @@
 
 📘 ER 다이어그램(ERD)
 
-![Schedule.png](..%2F..%2F..%2FDownloads%2FSchedule.png)
-
+![img.png](img.png)
