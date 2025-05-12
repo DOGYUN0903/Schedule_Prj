@@ -5,10 +5,9 @@ import com.example.scheduleprj.lv1.dto.ScheduleResponseDto;
 import com.example.scheduleprj.lv1.service.ScheduleServiceV1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedule-v1")
@@ -24,5 +23,11 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
         return new ResponseEntity<>(scheduleServiceV1.saveSchedule(requestDto), HttpStatus.CREATED);
+    }
+
+    // 전체 일정 조회 API
+    @GetMapping
+    public List<ScheduleResponseDto> findAllSchedules() {
+        return scheduleServiceV1.findAllSchedules();
     }
 }
