@@ -2,11 +2,13 @@ package com.example.scheduleprj.lv1.repository;
 
 import com.example.scheduleprj.lv1.dto.ScheduleResponseDto;
 import com.example.scheduleprj.lv1.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
@@ -52,6 +55,15 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         return jdbcTemplate.query("select * from schedulev1 order by modifiedAt desc", scheduleMapper());
     }
 
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(Long id) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedulev1 where id = ?", scheduleMapperV2(), id);
+
+        return result.stream()
+                .findAny()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+    }
+
     private RowMapper<ScheduleResponseDto> scheduleMapper() {
         return new RowMapper<ScheduleResponseDto>() {
             @Override
@@ -62,6 +74,23 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                         rs.getString("writer"),
                         rs.getTimestamp("modifiedAt").toLocalDateTime()
 
+                );
+            }
+        };
+    }
+
+    private RowMapper<Schedule> scheduleMapperV2() {
+        return new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
+                        rs.getLong("id"),
+                        rs.getString("writer"),
+                        rs.getString("title"),
+                        rs.getString("password"),
+                        rs.getString("contents"),
+                        rs.getTimestamp("createdAt").toLocalDateTime(),
+                        rs.getTimestamp("modifiedAt").toLocalDateTime()
                 );
             }
         };

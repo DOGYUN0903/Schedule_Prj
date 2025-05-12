@@ -34,4 +34,11 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     public List<ScheduleResponseDto> findAllSchedules() {
         return scheduleRepositoryV1.findAllSchedules();
     }
+
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+        Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule);
+    }
 }
