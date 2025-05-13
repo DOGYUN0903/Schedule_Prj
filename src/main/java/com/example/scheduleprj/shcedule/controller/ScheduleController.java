@@ -32,19 +32,19 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleServiceV1.saveSchedule(requestDto), HttpStatus.CREATED);
     }
 
-//
-//    /**
-//     * 전체 일정 조회 API
-//     *
-//     * @param writer
-//     * @param modifiedAt
-//     * @return
-//     */
-//    @GetMapping
-//    public List<ScheduleResponseDto> findAllSchedules(@RequestParam(name = "writer", required = false) String writer,
-//                                                      @RequestParam(name = "modifiedAt", required = false) String modifiedAt) {
-//        return scheduleServiceV1.findAllSchedules(writer, modifiedAt);
-//    }
+
+    /**
+     * 전체 일정 조회 API
+     *
+     * @param memberId
+     * @param modifiedAt
+     * @return
+     */
+    @GetMapping
+    public List<ScheduleResponseDto> findAllSchedules(@RequestParam(name = "memberId", required = false) Long memberId,
+                                                      @RequestParam(name = "modifiedAt", required = false) String modifiedAt) {
+        return scheduleServiceV1.findAllSchedules(memberId, modifiedAt);
+    }
 //
 //
 //    /**

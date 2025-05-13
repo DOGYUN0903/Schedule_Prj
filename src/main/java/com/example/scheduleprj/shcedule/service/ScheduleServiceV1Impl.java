@@ -30,10 +30,10 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
         return scheduleRepositoryV1.saveSchedule(schedule);
     }
 
-//    @Override
-//    public List<ScheduleResponseDto> findAllSchedules(String Writer, String modifiedAt) {
-//        return scheduleRepositoryV1.findAllSchedules(Writer, modifiedAt);
-//    }
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt) {
+        return scheduleRepositoryV1.findAllSchedules(memberId, modifiedAt);
+    }
 //
 //    @Override
 //    public ScheduleResponseDto findScheduleById(Long id) {

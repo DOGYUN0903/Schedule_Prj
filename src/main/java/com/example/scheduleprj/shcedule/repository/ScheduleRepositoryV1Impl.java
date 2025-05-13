@@ -50,18 +50,18 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 schedule.getModifiedAt());
     }
 
-//    @Override
-//    public List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt) {
-//        if (writer != null && modifiedAt == null) {
-//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer);
-//        } else if (writer == null && modifiedAt != null) {
-//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), modifiedAt);
-//        } else if (writer != null && modifiedAt != null) {
-//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? AND DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer, modifiedAt);
-//        } else {
-//            return jdbcTemplate.query("SELECT * FROM scheduleV1 ORDER BY modifiedAt DESC", scheduleMapper());
-//        }
-//    }
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt) {
+        if (memberId != null && modifiedAt == null) {
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? ORDER BY modified_at DESC", scheduleMapper(), memberId);
+        } else if (memberId == null && modifiedAt != null) {
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE DATE(modified_at) = ? ORDER BY modified_at DESC", scheduleMapper(), modifiedAt);
+        } else if (memberId != null && modifiedAt != null) {
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? AND DATE(modified_at) = ? ORDER BY modified_at DESC", scheduleMapper(), memberId, modifiedAt);
+        } else {
+            return jdbcTemplate.query("SELECT * FROM schedules ORDER BY modified_at DESC", scheduleMapper());
+        }
+    }
 //
 //    @Override
 //    public Schedule findScheduleByIdOrElseThrow(Long id) {
@@ -82,20 +82,20 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
 //        return jdbcTemplate.update("delete from schedulev1 where id = ? " , id);
 //    }
 //
-//    private RowMapper<ScheduleResponseDto> scheduleMapper() {
-//        return new RowMapper<ScheduleResponseDto>() {
-//            @Override
-//            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                return new ScheduleResponseDto(
-//                        rs.getLong("id"),
-//                        rs.getString("title"),
-//                        rs.getString("writer"),
-//                        rs.getString("contents"),
-//                        rs.getTimestamp("modifiedAt").toLocalDateTime()
-//                );
-//            }
-//        };
-//    }
+    private RowMapper<ScheduleResponseDto> scheduleMapper() {
+        return new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getLong("member_id"),
+                        rs.getString("title"),
+                        rs.getString("contents"),
+                        rs.getTimestamp("modified_at").toLocalDateTime()
+                );
+            }
+        };
+    }
 //
 //    private RowMapper<Schedule> scheduleMapperV2() {
 //        return new RowMapper<Schedule>() {
