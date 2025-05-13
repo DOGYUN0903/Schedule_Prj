@@ -24,4 +24,11 @@ public class MemberServiceImpl implements MemberService {
         );
         return memberRepository.createMember(member);
     }
+
+    @Override
+    public MemberResponseDto findMemberById(Long id) {
+        Member member = memberRepository.findMemberByIdOrElseThrow(id);
+
+        return new MemberResponseDto(member);
+    }
 }

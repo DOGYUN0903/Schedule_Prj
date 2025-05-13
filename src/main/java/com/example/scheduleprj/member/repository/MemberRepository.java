@@ -7,4 +7,6 @@ import com.example.scheduleprj.member.entity.Member;
 public interface MemberRepository {
 
     MemberResponseDto createMember(Member member);
+
+    Member findMemberByIdOrElseThrow(Long id);
 }
