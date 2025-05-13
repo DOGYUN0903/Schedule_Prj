@@ -52,15 +52,23 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt) {
+    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt, int page, int size) {
+        // offset: 앞에서 건너뛸 데이터 수를 계산
+        // 예: page = 2, size = 10이면 -> offset = 20 (즉, 21번째 데이터부터 시작)
+        int offset = page * size;
+
         if (memberId != null && modifiedAt == null) {
-            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? ORDER BY modified_at DESC", scheduleMapper(), memberId);
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? ORDER BY modified_at DESC LIMIT ? OFFSET ?",
+                    scheduleMapper(), memberId, size, offset); // size : 가져올 개수(한 페이지에 몇개를 보여줄건가?), offset : 앞에서 건너뛸 개수(앞에서 몇개 건너뛸건가?)
         } else if (memberId == null && modifiedAt != null) {
-            return jdbcTemplate.query("SELECT * FROM schedules WHERE DATE(modified_at) = ? ORDER BY modified_at DESC", scheduleMapper(), modifiedAt);
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE DATE(modified_at) = ? ORDER BY modified_at DESC LIMIT ? OFFSET ?",
+                    scheduleMapper(), modifiedAt, size, offset);
         } else if (memberId != null && modifiedAt != null) {
-            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? AND DATE(modified_at) = ? ORDER BY modified_at DESC", scheduleMapper(), memberId, modifiedAt);
+            return jdbcTemplate.query("SELECT * FROM schedules WHERE member_id = ? AND DATE(modified_at) = ? ORDER BY modified_at DESC LIMIT ? OFFSET ?",
+                    scheduleMapper(), memberId, modifiedAt, size, offset);
         } else {
-            return jdbcTemplate.query("SELECT * FROM schedules ORDER BY modified_at DESC", scheduleMapper());
+            return jdbcTemplate.query("SELECT * FROM schedules ORDER BY modified_at DESC LIMIT ? OFFSET ?",
+                    scheduleMapper(), size, offset);
         }
     }
 

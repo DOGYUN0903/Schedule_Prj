@@ -41,8 +41,10 @@ public class ScheduleController {
      */
     @GetMapping
     public List<ScheduleResponseDto> findAllSchedules(@RequestParam(name = "memberId", required = false) Long memberId,
-                                                      @RequestParam(name = "modifiedAt", required = false) String modifiedAt) {
-        return scheduleServiceV1.findAllSchedules(memberId, modifiedAt);
+                                                      @RequestParam(name = "modifiedAt", required = false) String modifiedAt,
+                                                      @RequestParam(name = "page", defaultValue = "0") int page,
+                                                      @RequestParam(name = "size", defaultValue = "10") int size) {
+        return scheduleServiceV1.findAllSchedules(memberId, modifiedAt, page, size);
     }
 
 

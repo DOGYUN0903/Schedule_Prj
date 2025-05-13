@@ -36,8 +36,8 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt) {
-        return scheduleRepositoryV1.findAllSchedules(memberId, modifiedAt);
+    public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt, int page, int size) {
+        return scheduleRepositoryV1.findAllSchedules(memberId, modifiedAt, page, size);
     }
 
     @Override
