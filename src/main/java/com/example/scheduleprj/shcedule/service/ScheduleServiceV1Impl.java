@@ -1,26 +1,31 @@
 package com.example.scheduleprj.shcedule.service;
 
+import com.example.scheduleprj.member.entity.Member;
+import com.example.scheduleprj.member.repository.MemberRepository;
 import com.example.scheduleprj.shcedule.dto.ScheduleRequestDto;
 import com.example.scheduleprj.shcedule.dto.ScheduleResponseDto;
 import com.example.scheduleprj.shcedule.entity.Schedule;
 import com.example.scheduleprj.shcedule.repository.ScheduleRepositoryV1;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleServiceV1Impl implements ScheduleServiceV1{
 
     private final ScheduleRepositoryV1 scheduleRepositoryV1;
-
-    public ScheduleServiceV1Impl(ScheduleRepositoryV1 scheduleRepositoryV1) {
-        this.scheduleRepositoryV1 = scheduleRepositoryV1;
-    }
-
+    private final MemberRepository memberRepository;
 
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
+        Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(requestDto.getMemberId());
+        if (!requestDto.getPassword().equals(memberByIdOrElseThrow.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+        }
+
         Schedule schedule = new Schedule(
                 requestDto.getMemberId(),
                 requestDto.getTitle(),
@@ -38,30 +43,28 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
         Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
-
         return new ScheduleResponseDto(schedule);
     }
 
-//    @Override
-//    public ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password) {
-//        Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
-//
-//        if (!schedule.getPassword().equals(password)) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
-//        }
-//
-//        if (writer == null || contents == null) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The writer and contents are required values.");
-//        }
-//
-//        int updateRow = scheduleRepositoryV1.updateSchedule(id, writer, contents);
-//        if (updateRow == 0) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
-//        }
-//
-//        return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
-//    }
-//
+    @Override
+    public ScheduleResponseDto updateSchedule(Long id, String title, String contents, String password) {
+        Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id).getMemberId());
+        if (!memberByIdOrElseThrow.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+        }
+
+        if (title == null || contents == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and contents are required values.");
+        }
+
+        int updateRow = scheduleRepositoryV1.updateSchedule(id, title, contents);
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+        }
+
+        return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
+    }
+
 //    @Override
 //    public void deleteSchedule(Long id, String password) {
 //        Schedule findSchedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);

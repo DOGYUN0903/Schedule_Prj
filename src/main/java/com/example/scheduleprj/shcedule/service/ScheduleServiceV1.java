@@ -10,11 +10,11 @@ public interface ScheduleServiceV1 {
     ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto);
 
     List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt);
-//
+
     ScheduleResponseDto findScheduleById(Long id);
-//
-//    ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password);
-//
+
+    ScheduleResponseDto updateSchedule(Long id, String title, String contents, String password);
+
 //    void deleteSchedule(Long id, String password);
 
 }

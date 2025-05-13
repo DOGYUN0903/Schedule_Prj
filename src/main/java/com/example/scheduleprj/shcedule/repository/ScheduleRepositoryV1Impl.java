@@ -2,6 +2,7 @@ package com.example.scheduleprj.shcedule.repository;
 
 import com.example.scheduleprj.shcedule.dto.ScheduleResponseDto;
 import com.example.scheduleprj.shcedule.entity.Schedule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -72,11 +73,11 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
-//    @Override
-//    public int updateSchedule(Long id, String writer, String contents) {
-//        return jdbcTemplate.update("update schedulev1 set contents = ? , writer = ?, modifiedAt = ? where id = ?", contents, writer, LocalDateTime.now(), id);
-//    }
-//
+    @Override
+    public int updateSchedule(Long id, String title, String contents) {
+        return jdbcTemplate.update("update schedules set contents = ? , title = ?, modified_at = ? where id = ?", contents, title, LocalDateTime.now(), id);
+    }
+
 //    @Override
 //    public int deleteSchedule(Long id) {
 //        return jdbcTemplate.update("delete from schedulev1 where id = ? " , id);

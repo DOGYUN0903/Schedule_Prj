@@ -1,9 +1,11 @@
 package com.example.scheduleprj.shcedule.controller;
 
+import com.example.scheduleprj.member.entity.Member;
 import com.example.scheduleprj.member.service.MemberService;
 import com.example.scheduleprj.shcedule.dto.ScheduleRequestDto;
 import com.example.scheduleprj.shcedule.dto.ScheduleResponseDto;
 import com.example.scheduleprj.shcedule.service.ScheduleServiceV1;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
+@RequiredArgsConstructor
 public class ScheduleController {
 
     private final ScheduleServiceV1 scheduleServiceV1;
-
-    public ScheduleController(ScheduleServiceV1 scheduleServiceV1) {
-        this.scheduleServiceV1 = scheduleServiceV1;
-    }
+    private final MemberService memberService;
 
 
     /**
@@ -35,7 +35,6 @@ public class ScheduleController {
 
     /**
      * 전체 일정 조회 API
-     *
      * @param memberId
      * @param modifiedAt
      * @return
@@ -56,22 +55,21 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponseDto> findSchedulesById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(scheduleServiceV1.findScheduleById(id), HttpStatus.OK);
     }
-//
-//
-//    /**
-//     * 선택 일정 수정 API
-//     *
-//     * @param id
-//     * @param requestDto
-//     * @return
-//     */
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id,
-//                                                              @RequestBody ScheduleRequestDto requestDto) {
-//        return new ResponseEntity<>(scheduleServiceV1.updateSchedule(id, requestDto.getWriter(), requestDto.getContents(), requestDto.getPassword()), HttpStatus.OK);
-//    }
-//
-//
+
+
+    /**
+     * 선택 일정 수정 API
+     * @param id
+     * @param requestDto
+     * @return
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id,
+                                                              @RequestBody ScheduleRequestDto requestDto) {
+        return new ResponseEntity<>(scheduleServiceV1.updateSchedule(id, requestDto.getTitle(), requestDto.getContents(), requestDto.getPassword()), HttpStatus.OK);
+    }
+
+
 //    /**
 //     *  삭제 API
 //     * @param id
