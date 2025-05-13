@@ -1,7 +1,7 @@
-package com.example.scheduleprj.lv1.repository;
+package com.example.scheduleprj.shcedule.repository;
 
-import com.example.scheduleprj.lv1.dto.ScheduleResponseDto;
-import com.example.scheduleprj.lv1.entity.Schedule;
+import com.example.scheduleprj.shcedule.dto.ScheduleResponseDto;
+import com.example.scheduleprj.shcedule.entity.Schedule;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {

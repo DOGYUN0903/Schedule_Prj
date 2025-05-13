@@ -1,4 +1,4 @@
-package com.example.scheduleprj.lv1.entity;
+package com.example.scheduleprj.shcedule.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,4 +24,5 @@ public class Schedule {
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = this.createdAt;
     }
+
 }

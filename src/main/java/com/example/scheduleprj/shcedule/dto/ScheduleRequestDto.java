@@ -1,4 +1,4 @@
-package com.example.scheduleprj.lv1.dto;
+package com.example.scheduleprj.shcedule.dto;
 
 import lombok.Getter;
 

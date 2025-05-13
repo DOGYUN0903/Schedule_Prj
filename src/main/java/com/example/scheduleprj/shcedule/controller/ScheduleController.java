@@ -1,8 +1,8 @@
-package com.example.scheduleprj.lv1.controller;
+package com.example.scheduleprj.shcedule.controller;
 
-import com.example.scheduleprj.lv1.dto.ScheduleRequestDto;
-import com.example.scheduleprj.lv1.dto.ScheduleResponseDto;
-import com.example.scheduleprj.lv1.service.ScheduleServiceV1;
+import com.example.scheduleprj.shcedule.dto.ScheduleRequestDto;
+import com.example.scheduleprj.shcedule.dto.ScheduleResponseDto;
+import com.example.scheduleprj.shcedule.service.ScheduleServiceV1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

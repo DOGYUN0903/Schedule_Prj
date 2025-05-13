@@ -1,6 +1,6 @@
-package com.example.scheduleprj.lv1.dto;
+package com.example.scheduleprj.shcedule.dto;
 
-import com.example.scheduleprj.lv1.entity.Schedule;
+import com.example.scheduleprj.shcedule.entity.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
