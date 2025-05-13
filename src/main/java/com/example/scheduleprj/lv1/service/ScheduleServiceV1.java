@@ -15,4 +15,6 @@ public interface ScheduleServiceV1 {
 
     ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password);
 
+    void deleteSchedule(Long id, String password);
+
 }

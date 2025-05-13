@@ -7,8 +7,6 @@ import com.example.scheduleprj.lv1.repository.ScheduleRepositoryV1;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -63,5 +61,18 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
         }
 
         return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
+    }
+
+    @Override
+    public void deleteSchedule(Long id, String password) {
+        Schedule findSchedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
+        if (!findSchedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+        }
+
+        int deleteRow = scheduleRepositoryV1.deleteSchedule(id);
+        if (deleteRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
     }
 }
