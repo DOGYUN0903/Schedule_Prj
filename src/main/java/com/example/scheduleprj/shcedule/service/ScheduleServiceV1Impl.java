@@ -1,5 +1,9 @@
 package com.example.scheduleprj.shcedule.service;
 
+import com.example.scheduleprj.global.exception.InvalidPasswordException;
+import com.example.scheduleprj.global.exception.MissingTitleOrContentsException;
+import com.example.scheduleprj.global.exception.NoScheduleModifiedException;
+import com.example.scheduleprj.global.exception.NotFoundScheduleException;
 import com.example.scheduleprj.member.entity.Member;
 import com.example.scheduleprj.member.repository.MemberRepository;
 import com.example.scheduleprj.shcedule.dto.ScheduleRequestDto;
@@ -23,7 +27,7 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(requestDto.getMemberId());
         if (!requestDto.getPassword().equals(memberByIdOrElseThrow.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+            throw new InvalidPasswordException();
         }
 
         Schedule schedule = new Schedule(
@@ -50,16 +54,16 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     public ScheduleResponseDto updateSchedule(Long id, String title, String contents, String password) {
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id).getMemberId());
         if (!memberByIdOrElseThrow.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+            throw new InvalidPasswordException();
         }
 
         if (title == null || contents == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and contents are required values.");
+            throw new MissingTitleOrContentsException();
         }
 
         int updateRow = scheduleRepositoryV1.updateSchedule(id, title, contents);
         if (updateRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+            throw new NoScheduleModifiedException(id);
         }
 
         return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
@@ -69,12 +73,12 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     public void deleteSchedule(Long id, String password) {
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id).getMemberId());
         if (!memberByIdOrElseThrow.getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
+            throw new InvalidPasswordException();
         }
 
         int deleteRow = scheduleRepositoryV1.deleteSchedule(id);
         if (deleteRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new NotFoundScheduleException(id);
         }
     }
 }

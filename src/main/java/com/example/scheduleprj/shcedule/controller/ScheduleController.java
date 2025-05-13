@@ -18,7 +18,6 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleServiceV1 scheduleServiceV1;
-    private final MemberService memberService;
 
 
     /**

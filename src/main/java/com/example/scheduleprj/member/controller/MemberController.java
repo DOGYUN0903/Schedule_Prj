@@ -18,8 +18,7 @@ public class MemberController {
     }
 
     /**
-     * 회원가입 API
-     *
+     * 회원가입 A
      * @param requestDto
      * @return
      */
