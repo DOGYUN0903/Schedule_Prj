@@ -34,14 +34,14 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt) {
         return scheduleRepositoryV1.findAllSchedules(memberId, modifiedAt);
     }
-//
-//    @Override
-//    public ScheduleResponseDto findScheduleById(Long id) {
-//        Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
-//
-//        return new ScheduleResponseDto(schedule);
-//    }
-//
+
+    @Override
+    public ScheduleResponseDto findScheduleById(Long id) {
+        Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
+
+        return new ScheduleResponseDto(schedule);
+    }
+
 //    @Override
 //    public ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password) {
 //        Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);

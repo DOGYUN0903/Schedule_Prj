@@ -10,7 +10,7 @@ public interface ScheduleRepositoryV1 {
 
     List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt);
 //
-//    Schedule findScheduleByIdOrElseThrow(Long id);
+    Schedule findScheduleByIdOrElseThrow(Long id);
 //
 //    int updateSchedule(Long id, String writer, String contents);
 //

@@ -62,16 +62,16 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
             return jdbcTemplate.query("SELECT * FROM schedules ORDER BY modified_at DESC", scheduleMapper());
         }
     }
-//
-//    @Override
-//    public Schedule findScheduleByIdOrElseThrow(Long id) {
-//        List<Schedule> result = jdbcTemplate.query("select * from schedulev1 where id = ?", scheduleMapperV2(), id);
-//
-//        return result.stream()
-//                .findAny()
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
-//    }
-//
+
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(Long id) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedules where id = ?", scheduleMapperV2(), id);
+
+        return result.stream()
+                .findAny()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+    }
+
 //    @Override
 //    public int updateSchedule(Long id, String writer, String contents) {
 //        return jdbcTemplate.update("update schedulev1 set contents = ? , writer = ?, modifiedAt = ? where id = ?", contents, writer, LocalDateTime.now(), id);
@@ -96,21 +96,20 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
             }
         };
     }
-//
-//    private RowMapper<Schedule> scheduleMapperV2() {
-//        return new RowMapper<Schedule>() {
-//            @Override
-//            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                return new Schedule(
-//                        rs.getLong("id"),
-//                        rs.getString("writer"),
-//                        rs.getString("title"),
-//                        rs.getString("password"),
-//                        rs.getString("contents"),
-//                        rs.getTimestamp("createdAt").toLocalDateTime(),
-//                        rs.getTimestamp("modifiedAt").toLocalDateTime()
-//                );
-//            }
-//        };
-//    }
+
+    private RowMapper<Schedule> scheduleMapperV2() {
+        return new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
+                        rs.getLong("id"),
+                        rs.getLong("member_id"),
+                        rs.getString("title"),
+                        rs.getString("contents"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("modified_at").toLocalDateTime()
+                );
+            }
+        };
+    }
 }

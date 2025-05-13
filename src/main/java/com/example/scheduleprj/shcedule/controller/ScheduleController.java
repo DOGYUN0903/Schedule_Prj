@@ -45,18 +45,17 @@ public class ScheduleController {
                                                       @RequestParam(name = "modifiedAt", required = false) String modifiedAt) {
         return scheduleServiceV1.findAllSchedules(memberId, modifiedAt);
     }
-//
-//
-//    /**
-//     * 세부 일정 조회 API
-//     *
-//     * @param id
-//     * @return
-//     */
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> findSchedulesById(@PathVariable("id") Long id) {
-//        return new ResponseEntity<>(scheduleServiceV1.findScheduleById(id), HttpStatus.OK);
-//    }
+
+
+    /**
+     * 세부 일정 조회 API
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> findSchedulesById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(scheduleServiceV1.findScheduleById(id), HttpStatus.OK);
+    }
 //
 //
 //    /**

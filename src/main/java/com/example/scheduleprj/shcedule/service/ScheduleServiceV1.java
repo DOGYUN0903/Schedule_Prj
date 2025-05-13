@@ -11,7 +11,7 @@ public interface ScheduleServiceV1 {
 
     List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt);
 //
-//    ScheduleResponseDto findScheduleById(Long id);
+    ScheduleResponseDto findScheduleById(Long id);
 //
 //    ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password);
 //
