@@ -3,6 +3,7 @@ package com.example.scheduleprj.member.controller;
 import com.example.scheduleprj.member.dto.MemberRequestDto;
 import com.example.scheduleprj.member.dto.MemberResponseDto;
 import com.example.scheduleprj.member.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class MemberController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<MemberResponseDto> createMember(@RequestBody MemberRequestDto requestDto) {
+    public ResponseEntity<MemberResponseDto> createMember(@RequestBody @Valid MemberRequestDto requestDto) {
         return new ResponseEntity<>(memberService.createMember(requestDto), HttpStatus.CREATED);
     }
 
