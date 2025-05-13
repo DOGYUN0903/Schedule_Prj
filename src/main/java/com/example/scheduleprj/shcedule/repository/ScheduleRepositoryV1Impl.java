@@ -78,11 +78,11 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         return jdbcTemplate.update("update schedules set contents = ? , title = ?, modified_at = ? where id = ?", contents, title, LocalDateTime.now(), id);
     }
 
-//    @Override
-//    public int deleteSchedule(Long id) {
-//        return jdbcTemplate.update("delete from schedulev1 where id = ? " , id);
-//    }
-//
+    @Override
+    public int deleteSchedule(Long id) {
+        return jdbcTemplate.update("delete from schedules where id = ? " , id);
+    }
+
     private RowMapper<ScheduleResponseDto> scheduleMapper() {
         return new RowMapper<ScheduleResponseDto>() {
             @Override

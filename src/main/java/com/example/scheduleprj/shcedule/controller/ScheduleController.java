@@ -70,15 +70,15 @@ public class ScheduleController {
     }
 
 
-//    /**
-//     *  삭제 API
-//     * @param id
-//     * @return
-//     */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable("id") Long id,
-//                                                              @RequestParam("password") String password) {
-//        scheduleServiceV1.deleteSchedule(id, password);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    /**
+     *  삭제 API
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable("id") Long id,
+                                                              @RequestParam("password") String password) {
+        scheduleServiceV1.deleteSchedule(id, password);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
