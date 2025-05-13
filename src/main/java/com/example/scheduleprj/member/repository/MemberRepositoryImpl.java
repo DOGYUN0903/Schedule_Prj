@@ -28,6 +28,7 @@ public class MemberRepositoryImpl implements MemberRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", member.getName());
         parameters.put("email", member.getEmail());
+        parameters.put("password", member.getPassword());
         parameters.put("created_at", member.getCreatedAt());
         parameters.put("modified_at", member.getModifiedAt());
 

@@ -19,7 +19,8 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponseDto createMember(MemberRequestDto requestDto) {
         Member member = new Member(
                 requestDto.getName(),
-                requestDto.getEmail()
+                requestDto.getEmail(),
+                requestDto.getPassword()
         );
         return memberRepository.createMember(member);
     }

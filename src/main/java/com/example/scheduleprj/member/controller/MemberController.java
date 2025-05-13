@@ -24,4 +24,6 @@ public class MemberController {
     public ResponseEntity<MemberResponseDto> createMember(@RequestBody MemberRequestDto requestDto) {
         return new ResponseEntity<>(memberService.createMember(requestDto), HttpStatus.CREATED);
     }
+
+
 }
