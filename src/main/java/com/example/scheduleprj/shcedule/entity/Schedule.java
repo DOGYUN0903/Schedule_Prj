@@ -9,17 +9,15 @@ import java.time.LocalDateTime;
 @Getter
 public class Schedule {
     private Long id;
-    private String writer;
+    private Long memberId; // 회원 id 외래키
     private String title;
-    private String password;
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public Schedule(String writer, String title, String password, String contents) {
-        this.writer = writer;
+    public Schedule(Long memberId, String title, String contents) {
+        this.memberId = memberId;
         this.title = title;
-        this.password = password;
         this.contents = contents;
         this.createdAt = LocalDateTime.now();
         this.modifiedAt = this.createdAt;

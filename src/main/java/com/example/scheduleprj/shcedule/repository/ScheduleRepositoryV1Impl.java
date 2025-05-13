@@ -30,13 +30,12 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("scheduleV1")
+                .withTableName("schedules")
                 .usingGeneratedKeyColumns("id");
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("writer", schedule.getWriter());
+        parameters.put("member_id", schedule.getMemberId());
         parameters.put("title", schedule.getTitle());
-        parameters.put("password", schedule.getPassword());
         parameters.put("contents", schedule.getContents());
         parameters.put("createdAt", schedule.getCreatedAt());
         parameters.put("modifiedAt", schedule.getModifiedAt());
@@ -45,73 +44,73 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
 
         return new ScheduleResponseDto(
                 key.longValue(),
+                schedule.getMemberId(),
                 schedule.getTitle(),
-                schedule.getWriter(),
                 schedule.getContents(),
                 schedule.getModifiedAt());
     }
 
-    @Override
-    public List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt) {
-        if (writer != null && modifiedAt == null) {
-            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer);
-        } else if (writer == null && modifiedAt != null) {
-            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), modifiedAt);
-        } else if (writer != null && modifiedAt != null) {
-            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? AND DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer, modifiedAt);
-        } else {
-            return jdbcTemplate.query("SELECT * FROM scheduleV1 ORDER BY modifiedAt DESC", scheduleMapper());
-        }
-    }
-
-    @Override
-    public Schedule findScheduleByIdOrElseThrow(Long id) {
-        List<Schedule> result = jdbcTemplate.query("select * from schedulev1 where id = ?", scheduleMapperV2(), id);
-
-        return result.stream()
-                .findAny()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
-    }
-
-    @Override
-    public int updateSchedule(Long id, String writer, String contents) {
-        return jdbcTemplate.update("update schedulev1 set contents = ? , writer = ?, modifiedAt = ? where id = ?", contents, writer, LocalDateTime.now(), id);
-    }
-
-    @Override
-    public int deleteSchedule(Long id) {
-        return jdbcTemplate.update("delete from schedulev1 where id = ? " , id);
-    }
-
-    private RowMapper<ScheduleResponseDto> scheduleMapper() {
-        return new RowMapper<ScheduleResponseDto>() {
-            @Override
-            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new ScheduleResponseDto(
-                        rs.getLong("id"),
-                        rs.getString("title"),
-                        rs.getString("writer"),
-                        rs.getString("contents"),
-                        rs.getTimestamp("modifiedAt").toLocalDateTime()
-                );
-            }
-        };
-    }
-
-    private RowMapper<Schedule> scheduleMapperV2() {
-        return new RowMapper<Schedule>() {
-            @Override
-            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Schedule(
-                        rs.getLong("id"),
-                        rs.getString("writer"),
-                        rs.getString("title"),
-                        rs.getString("password"),
-                        rs.getString("contents"),
-                        rs.getTimestamp("createdAt").toLocalDateTime(),
-                        rs.getTimestamp("modifiedAt").toLocalDateTime()
-                );
-            }
-        };
-    }
+//    @Override
+//    public List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt) {
+//        if (writer != null && modifiedAt == null) {
+//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer);
+//        } else if (writer == null && modifiedAt != null) {
+//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), modifiedAt);
+//        } else if (writer != null && modifiedAt != null) {
+//            return jdbcTemplate.query("SELECT * FROM scheduleV1 WHERE writer = ? AND DATE(modifiedAt) = ? ORDER BY modifiedAt DESC", scheduleMapper(), writer, modifiedAt);
+//        } else {
+//            return jdbcTemplate.query("SELECT * FROM scheduleV1 ORDER BY modifiedAt DESC", scheduleMapper());
+//        }
+//    }
+//
+//    @Override
+//    public Schedule findScheduleByIdOrElseThrow(Long id) {
+//        List<Schedule> result = jdbcTemplate.query("select * from schedulev1 where id = ?", scheduleMapperV2(), id);
+//
+//        return result.stream()
+//                .findAny()
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+//    }
+//
+//    @Override
+//    public int updateSchedule(Long id, String writer, String contents) {
+//        return jdbcTemplate.update("update schedulev1 set contents = ? , writer = ?, modifiedAt = ? where id = ?", contents, writer, LocalDateTime.now(), id);
+//    }
+//
+//    @Override
+//    public int deleteSchedule(Long id) {
+//        return jdbcTemplate.update("delete from schedulev1 where id = ? " , id);
+//    }
+//
+//    private RowMapper<ScheduleResponseDto> scheduleMapper() {
+//        return new RowMapper<ScheduleResponseDto>() {
+//            @Override
+//            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                return new ScheduleResponseDto(
+//                        rs.getLong("id"),
+//                        rs.getString("title"),
+//                        rs.getString("writer"),
+//                        rs.getString("contents"),
+//                        rs.getTimestamp("modifiedAt").toLocalDateTime()
+//                );
+//            }
+//        };
+//    }
+//
+//    private RowMapper<Schedule> scheduleMapperV2() {
+//        return new RowMapper<Schedule>() {
+//            @Override
+//            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                return new Schedule(
+//                        rs.getLong("id"),
+//                        rs.getString("writer"),
+//                        rs.getString("title"),
+//                        rs.getString("password"),
+//                        rs.getString("contents"),
+//                        rs.getTimestamp("createdAt").toLocalDateTime(),
+//                        rs.getTimestamp("modifiedAt").toLocalDateTime()
+//                );
+//            }
+//        };
+//    }
 }

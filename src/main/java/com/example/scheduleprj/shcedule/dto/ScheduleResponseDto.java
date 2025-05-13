@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ScheduleResponseDto {
     private Long id;
+    private Long memberId;
     private String title;
-    private String writer;  // 또는 username
     private String contents;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime modifiedAt;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();
+        this.memberId = schedule.getMemberId();
         this.title = schedule.getTitle();
-        this.writer = schedule.getWriter();
         this.contents = schedule.getContents();
         this.modifiedAt = schedule.getModifiedAt();
     }

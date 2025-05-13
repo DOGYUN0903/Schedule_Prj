@@ -9,12 +9,12 @@ public interface ScheduleServiceV1 {
 
     ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto);
 
-    List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt);
-
-    ScheduleResponseDto findScheduleById(Long id);
-
-    ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password);
-
-    void deleteSchedule(Long id, String password);
+//    List<ScheduleResponseDto> findAllSchedules(String writer, String modifiedAt);
+//
+//    ScheduleResponseDto findScheduleById(Long id);
+//
+//    ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password);
+//
+//    void deleteSchedule(Long id, String password);
 
 }
