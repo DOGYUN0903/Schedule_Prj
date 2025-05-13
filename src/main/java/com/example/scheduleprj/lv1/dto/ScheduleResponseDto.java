@@ -13,7 +13,7 @@ public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String writer;  // 또는 username
-
+    private String contents;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime modifiedAt;
 
@@ -21,6 +21,7 @@ public class ScheduleResponseDto {
         this.id = schedule.getId();
         this.title = schedule.getTitle();
         this.writer = schedule.getWriter();
+        this.contents = schedule.getContents();
         this.modifiedAt = schedule.getModifiedAt();
     }
 }

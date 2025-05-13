@@ -46,23 +46,22 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     }
 
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, String writer, String contents, String password) {
         Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
 
-        if (!schedule.getPassword().equals(requestDto.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
+        if (!schedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not the same");
         }
 
-        Schedule updated = new Schedule(
-                schedule.getId(),
-                requestDto.getWriter(),
-                requestDto.getTitle(),
-                schedule.getPassword(),
-                schedule.getContents(),
-                schedule.getCreatedAt(),
-                LocalDateTime.now()
-        );
+        if (writer == null || contents == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The writer and contents are required values.");
+        }
 
-        return scheduleRepositoryV1.updateSchedule(updated);
+        int updateRow = scheduleRepositoryV1.updateSchedule(id, writer, contents);
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+        }
+
+        return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
     }
 }

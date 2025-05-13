@@ -39,5 +39,10 @@ public class ScheduleController {
     }
 
     // 선택 일정 수정 API(
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable("id") Long id,
+                                                              @RequestBody ScheduleRequestDto requestDto) {
+        return new ResponseEntity<>(scheduleServiceV1.updateSchedule(id, requestDto.getWriter(), requestDto.getContents(), requestDto.getPassword()), HttpStatus.OK);
+    }
 
 }

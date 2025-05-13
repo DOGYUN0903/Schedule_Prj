@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,7 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 key.longValue(),
                 schedule.getTitle(),
                 schedule.getWriter(),
+                schedule.getContents(),
                 schedule.getModifiedAt());
     }
 
@@ -73,9 +75,8 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
     }
 
     @Override
-    public ScheduleResponseDto updateSchedule(Schedule schedule) {
-        return null;
-//        return new ScheduleResponseDto(jdbcTemplate.update(""));
+    public int updateSchedule(Long id, String writer, String contents) {
+        return jdbcTemplate.update("update schedulev1 set contents = ? , writer = ?, modifiedAt = ? where id = ?", contents, writer, LocalDateTime.now(), id);
     }
 
     private RowMapper<ScheduleResponseDto> scheduleMapper() {
@@ -86,8 +87,8 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("writer"),
+                        rs.getString("contents"),
                         rs.getTimestamp("modifiedAt").toLocalDateTime()
-
                 );
             }
         };
