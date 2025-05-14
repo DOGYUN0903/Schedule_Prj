@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ScheduleRepositoryV1의 JDBC 구현체입니다.
+ * - 일정의 저장, 조회, 수정, 삭제 기능을 수행합니다.
+ */
 @Repository
 public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
 
@@ -28,6 +32,11 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * 일정 저장
+     * - SimpleJdbcInsert를 통해 자동으로 insert 쿼리를 생성하고 실행
+     * - 생성된 PK(id)를 반환 받아 ScheduleResponseDto로 반환
+     */
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
@@ -51,6 +60,11 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 schedule.getModifiedAt());
     }
 
+    /**
+     * 일정 전체 조회
+     * - 조건: memberId, modifiedAt (nullable)
+     * - 페이징 처리 포함 (LIMIT / OFFSET)
+     */
     @Override
     public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt, int page, int size) {
         // offset: 앞에서 건너뛸 데이터 수를 계산
@@ -72,6 +86,10 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         }
     }
 
+    /**
+     * 일정 단건 조회
+     * - ID로 조회하고, 없을 경우 404 예외 반환
+     */
     @Override
     public Schedule findScheduleByIdOrElseThrow(Long id) {
         List<Schedule> result = jdbcTemplate.query("select * from schedules where id = ?", scheduleMapperV2(), id);
@@ -81,16 +99,29 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
+    /**
+     * 일정 수정
+     * - 제목, 내용, 수정일 갱신
+     * - 수정된 행 수 반환
+     */
     @Override
     public int updateSchedule(Long id, String title, String contents) {
         return jdbcTemplate.update("update schedules set contents = ? , title = ?, modified_at = ? where id = ?", contents, title, LocalDateTime.now(), id);
     }
 
+    /**
+     * 일정 삭제
+     * - 삭제된 행 수 반환
+     */
     @Override
     public int deleteSchedule(Long id) {
         return jdbcTemplate.update("delete from schedules where id = ? " , id);
     }
 
+    /**
+     * ScheduleResponseDto 매핑용 RowMapper
+     * - 클라이언트에 전달할 조회 결과 DTO로 매핑
+     */
     private RowMapper<ScheduleResponseDto> scheduleMapper() {
         return new RowMapper<ScheduleResponseDto>() {
             @Override
@@ -106,6 +137,10 @@ public class ScheduleRepositoryV1Impl implements ScheduleRepositoryV1 {
         };
     }
 
+    /**
+     * Schedule 엔티티 매핑용 RowMapper
+     * - 서비스 및 내부 로직에서 사용할 도메인 객체로 변환
+     */
     private RowMapper<Schedule> scheduleMapperV2() {
         return new RowMapper<Schedule>() {
             @Override

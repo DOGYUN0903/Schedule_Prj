@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
+/**
+ * 일정 관련 비즈니스 로직을 처리하는 서비스 구현체입니다.
+ * - 생성, 전체 조회, 단건 조회, 수정, 삭제 기능을 제공합니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceV1Impl implements ScheduleServiceV1{
@@ -23,8 +27,13 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
     private final ScheduleRepositoryV1 scheduleRepositoryV1;
     private final MemberRepository memberRepository;
 
+    /**
+     * 일정 생성
+     * - 회원 존재 및 비밀번호 검증 후, 일정 저장
+     */
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
+        // 회원 조회 및 비밀번호 검증
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(requestDto.getMemberId());
         if (!requestDto.getPassword().equals(memberByIdOrElseThrow.getPassword())) {
             throw new InvalidPasswordException();
@@ -39,17 +48,31 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
         return scheduleRepositoryV1.saveSchedule(schedule);
     }
 
+    /**
+     * 전체 일정 조회
+     * - 조건: 회원 ID, 수정일(옵션), 페이징 포함
+     */
     @Override
     public List<ScheduleResponseDto> findAllSchedules(Long memberId, String modifiedAt, int page, int size) {
         return scheduleRepositoryV1.findAllSchedules(memberId, modifiedAt, page, size);
     }
 
+    /**
+     * 일정 단건 조회
+     * - 존재하지 않을 경우 내부에서 예외 발생
+     */
     @Override
     public ScheduleResponseDto findScheduleById(Long id) {
         Schedule schedule = scheduleRepositoryV1.findScheduleByIdOrElseThrow(id);
         return new ScheduleResponseDto(schedule);
     }
 
+    /**
+     * 일정 수정
+     * - 비밀번호 검증
+     * - 제목/내용 null 체크
+     * - 수정된 행이 없으면 예외 발생
+     */
     @Override
     public ScheduleResponseDto updateSchedule(Long id, String title, String contents, String password) {
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id).getMemberId());
@@ -69,6 +92,11 @@ public class ScheduleServiceV1Impl implements ScheduleServiceV1{
         return new ScheduleResponseDto(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id));
     }
 
+    /**
+     * 일정 삭제
+     * - 비밀번호 검증 후 삭제
+     * - 삭제된 행이 없으면 예외 발생
+     */
     @Override
     public void deleteSchedule(Long id, String password) {
         Member memberByIdOrElseThrow = memberRepository.findMemberByIdOrElseThrow(scheduleRepositoryV1.findScheduleByIdOrElseThrow(id).getMemberId());
