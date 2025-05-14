@@ -11,9 +11,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 전역 예외 처리 클래스
+ * - 커스텀 예외 및 유효성 검증 실패에 대한 공통 응답 포맷 제공
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * 커스텀 예외 처리 핸들러
+     * - 비밀번호 오류, 일정 없음, 내용 없음, 수정 실패
+     */
     @ExceptionHandler({
             InvalidPasswordException.class,
             NotFoundScheduleException.class,
@@ -27,6 +35,7 @@ public class GlobalExceptionHandler {
             status = HttpStatus.NOT_FOUND;
         }
 
+        // 공통 응답 포맷 구성
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", status.value());
@@ -36,6 +45,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(body);
     }
 
+    /**
+     * @Valid 실패
+     * - 필드명과 에러 메시지를 합쳐서 반환
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
