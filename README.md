@@ -10,4 +10,5 @@
 
 📘 ER 다이어그램(ERD)
 
-![img.png](img.png)
+![schedule](https://github.com/user-attachments/assets/42133665-5e55-401b-bf45-6ffd5778dc61)
+
